@@ -1,12 +1,35 @@
-import { useState } from 'react'
+import React, { useState, Suspense, useEffect, useMemo } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import Component from './Component'
 import './App.css'
+const Component = React.lazy(() => import('./Component'))
+const Component1 = React.lazy(() => import('./Component1'))
+const Component3 = React.lazy(() => import('./Component3'))
+const ComponentNew = React.memo(Component1)
+
+
 
 function App() {
   const [count, setCount] = useState(0)
+  const [user, setUser] = useState({
+    name: "Ricardo"
+  })
 
+
+
+
+useEffect(() => {
+
+const timer = () => {
+  setTimeout(() => {
+    setUser({
+      name: "Ricardo2"
+    })
+  }, 5000)
+}
+timer()
+
+}, [])
   return (
     <>
       {/* <div>
@@ -26,7 +49,14 @@ function App() {
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
       </div>
+<Suspense fallback={<div>Loading...</div>}>
       <Component/>
+      </Suspense>
+      <Suspense fallback={<div>Loading...</div>}>
+      <Component1 user={user}/>
+      </Suspense>
+      <ComponentNew user={user}/>
+      <Component3 target={user}/>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
